@@ -1,0 +1,32 @@
+{
+    "departments": [
+        "Oddział Bydgoszcz",
+        "Oddział Warszawa",
+        "Oddział Poznań",
+        "Oddział Kraków"
+    ],
+    "addresses": [
+        "ul. Toruńska 20, 86-005 Ciele",
+        "ul. Przykładowa 1, 00-001 Warszawa",
+        "ul. Testowa 2, 60-001 Poznań",
+        "ul. Próbna 3, 30-001 Kraków"
+    ],
+    "positions": [
+        "Specjalista ds. marketingu",
+        "Handlowiec",
+        "Kierownik",
+        "Dyrektor",
+        "Administrator"
+    ],
+    "company_data": {
+        "default_department": "Oddział Bydgoszcz",
+        "default_address": "ul. Toruńska 20, 86-005 Ciele",
+        "website": "https://www.podnosniki.pl",
+        "facebook": "https://www.facebook.com/podnosnikiPL",
+        "linkedin": "https://www.linkedin.com/company/18902709",
+        "instagram": "https://www.instagram.com/podnosniki.pl/",
+        "youtube": "https://www.youtube.com/@Podnosnikipl",
+        "disclaimer": "Treść tej wiadomości jest poufna i przeznaczona wyłącznie dla odbiorcy wskazanego w wiadomości. Surowo zabrania się udostępniania jakiejkolwiek części tej wiadomości osobom trzecim bez pisemnej zgody nadawcy. Jeśli otrzymałeś tę wiadomość przez pomyłkę, prosimy o odpowiedź na tę wiadomość, a następnie jej usunięcie, abyśmy mogli zapewnić, że taka pomyłka nie powtórzy się w przyszłości.\n\nKARCZEWSKI sp. z o.o., ul. Toruńska 20, 86-005 Ciele"
+    },
+    "email_domain": "podnosniki.pl"
+}
