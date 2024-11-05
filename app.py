@@ -24,6 +24,11 @@ def load_config():
     with open('config.json', 'r', encoding='utf-8') as f:
         return json.load(f)
 
+# Save configuration
+def save_config(config_data):
+    with open('config.json', 'w', encoding='utf-8') as f:
+        json.dump(config_data, f, ensure_ascii=False, indent=2)
+
 # Generate email from name
 def generate_email(name, domain):
     if not name:
@@ -107,6 +112,125 @@ def find_signature_by_token(preview_token):
             return sig
     return None
 
+# Config editor section
+def config_editor():
+    st.title("Edytor Konfiguracji")
+    
+    config = load_config()
+    modified = False
+    
+    # Email domain
+    email_domain = st.text_input("Domena Email", value=config['email_domain'])
+    if email_domain != config['email_domain']:
+        config['email_domain'] = email_domain
+        modified = True
+    
+    # Departments
+    st.subheader("Oddziały")
+    departments = config['departments']
+    for i, dept in enumerate(departments):
+        col1, col2 = st.columns([4, 1])
+        with col1:
+            new_dept = st.text_input(f"Oddział {i+1}", value=dept, key=f"dept_{i}")
+            if new_dept != dept:
+                departments[i] = new_dept
+                modified = True
+        with col2:
+            if st.button("🗑️", key=f"del_dept_{i}"):
+                departments.pop(i)
+                modified = True
+                st.rerun()
+    
+    if st.button("➕ Dodaj Oddział"):
+        departments.append("Nowy Oddział")
+        modified = True
+        st.rerun()
+    
+    # Positions
+    st.subheader("Stanowiska")
+    positions = config['positions']
+    for i, pos in enumerate(positions):
+        col1, col2 = st.columns([4, 1])
+        with col1:
+            new_pos = st.text_input(f"Stanowisko {i+1}", value=pos, key=f"pos_{i}")
+            if new_pos != pos:
+                positions[i] = new_pos
+                modified = True
+        with col2:
+            if st.button("🗑️", key=f"del_pos_{i}"):
+                positions.pop(i)
+                modified = True
+                st.rerun()
+    
+    if st.button("➕ Dodaj Stanowisko"):
+        positions.append("Nowe Stanowisko")
+        modified = True
+        st.rerun()
+    
+    # Addresses
+    st.subheader("Adresy")
+    addresses = config['addresses']
+    for i, addr in enumerate(addresses):
+        col1, col2 = st.columns([4, 1])
+        with col1:
+            new_addr = st.text_input(f"Adres {i+1}", value=addr, key=f"addr_{i}")
+            if new_addr != addr:
+                addresses[i] = new_addr
+                modified = True
+        with col2:
+            if st.button("🗑️", key=f"del_addr_{i}"):
+                addresses.pop(i)
+                modified = True
+                st.rerun()
+    
+    if st.button("➕ Dodaj Adres"):
+        addresses.append("Nowy Adres")
+        modified = True
+        st.rerun()
+    
+    # Company data
+    st.subheader("Dane Firmowe")
+    company_data = config['company_data']
+    
+    # Default department
+    default_department = st.selectbox(
+        "Domyślny Oddział",
+        options=departments,
+        index=departments.index(company_data['default_department']) if company_data['default_department'] in departments else 0
+    )
+    if default_department != company_data['default_department']:
+        company_data['default_department'] = default_department
+        modified = True
+    
+    # Default address
+    default_address = st.selectbox(
+        "Domyślny Adres",
+        options=addresses,
+        index=addresses.index(company_data['default_address']) if company_data['default_address'] in addresses else 0
+    )
+    if default_address != company_data['default_address']:
+        company_data['default_address'] = default_address
+        modified = True
+    
+    # Social media and website
+    for key in ['website', 'facebook', 'linkedin', 'instagram', 'youtube']:
+        new_value = st.text_input(f"Link {key.title()}", value=company_data[key])
+        if new_value != company_data[key]:
+            company_data[key] = new_value
+            modified = True
+    
+    # Disclaimer
+    new_disclaimer = st.text_area("Treść Informacji", value=company_data['disclaimer'], height=200)
+    if new_disclaimer != company_data['disclaimer']:
+        company_data['disclaimer'] = new_disclaimer
+        modified = True
+    
+    # Save changes
+    if modified:
+        save_config(config)
+        st.success("Konfiguracja została zapisana!")
+        st.rerun()
+
 # Main Streamlit app
 def main():
     st.set_page_config(page_title="Generator Stopki Email", layout="wide")
@@ -130,9 +254,16 @@ def main():
     
     # Sidebar for navigation
     st.sidebar.title("Menu")
-    page = st.sidebar.radio("Wybierz opcję:", ["Lista Stopek", "Nowa Stopka"], index=0 if st.session_state.page == "Lista Stopek" else 1)
+    page = st.sidebar.radio(
+        "Wybierz opcję:",
+        ["Lista Stopek", "Nowa Stopka", "Konfiguracja"],
+        index=0 if st.session_state.page == "Lista Stopek" else 
+              1 if st.session_state.page == "Nowa Stopka" else 2
+    )
     
-    if page == "Lista Stopek":
+    if page == "Konfiguracja":
+        config_editor()
+    elif page == "Lista Stopek":
         st.title("Lista Stopek Email")
         
         # Add New Signature button
