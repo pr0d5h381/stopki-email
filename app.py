@@ -16,6 +16,9 @@ POLISH_CHARS = {
     'Ó': 'O', 'Ś': 'S', 'Ź': 'Z', 'Ż': 'Z'
 }
 
+# Production URL for Streamlit Cloud
+BASE_URL = "https://stopki-email.streamlit.app"
+
 # Load configuration
 def load_config():
     with open('config.json', 'r', encoding='utf-8') as f:
@@ -43,10 +46,9 @@ def generate_email(name, domain):
 
 # Generate public preview link
 def generate_preview_link(email):
-    base_url = st.secrets.get("BASE_URL", "http://localhost:8501")
     # Create a hash of the email to use as a preview token
     preview_token = hashlib.sha256(email.encode()).hexdigest()[:16]
-    return f"{base_url}?preview={preview_token}"
+    return f"{BASE_URL}?preview={preview_token}"
 
 # Save signature
 def save_signature(data):
